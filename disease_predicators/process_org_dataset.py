@@ -40,7 +40,7 @@ class OriginalDatasetPre:
             # updated_data = updated_data.sort_values(by='Disease').reset_index(drop=True)
 
             # Save the updated dataset
-            updated_data.to_csv('updated_disease_symptom_dataset.csv', index=False)
+            updated_data.to_csv('./datasets/updated_disease_symptom_dataset.csv', index=False)
 
 
             self.df=updated_data.copy()
@@ -125,7 +125,7 @@ class OriginalDatasetPre:
             self.fill_and_group_symptoms()
             self.balance_dataset()
 
-         self.df.to_csv("processed_dataset.csv",index=False)
+         self.df.to_csv("./datasets/processed_dataset.csv",index=False)
 
          return self.df
              
@@ -142,7 +142,7 @@ class OriginalDatasetPre:
         
             
 
-df = pd.read_csv('disease_symptom_dataset.csv')
+df = pd.read_csv('./datasets/disease_symptom_dataset.csv')
 pre=OriginalDatasetPre(df)
 new_diseases_list=cd.common_diseases_to_add
 df=pre.process_dataset()

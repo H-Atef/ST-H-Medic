@@ -14,9 +14,13 @@ import numpy as np
 
 from base_disease_predicator import DiseasePredictor
 
+
+
+
+
 class CustomDiseasePredicatotr(DiseasePredictor):
 
-    def __init__(self, df: Any= pd.read_csv('processed_dataset.csv') , model: Type[Any] = RandomForestClassifier, model_params: dict = None):
+    def __init__(self, df: Any= pd.read_csv('./datasets/processed_dataset.csv') , model: Type[Any] = RandomForestClassifier, model_params: dict = None):
         """
         Initializes the model with the dataframe and the type of machine learning model.
         Args:
@@ -84,9 +88,9 @@ class CustomDiseasePredicatotr(DiseasePredictor):
             return {"error": str(e)}
 
 
-    def save_model(self, model_path: str = 'model.pkl', 
-                   vectorizer_path: str = 'vectorizer.pkl', 
-                   encoder_path: str = 'label_encoder.pkl') -> None:
+    def save_model(self, model_path: str = './custom_model/model.pkl', 
+                   vectorizer_path: str = './custom_model/vectorizer.pkl', 
+                   encoder_path: str = './custom_model/label_encoder.pkl') -> None:
         """
         Saves the trained model, vectorizer, and encoder to disk with default filenames.
         Args:
@@ -98,6 +102,9 @@ class CustomDiseasePredicatotr(DiseasePredictor):
             # Ensure the model, vectorizer, and encoder are trained
             if not self.model or not self.vectorizer or not self.label_encoder:
                 raise RuntimeError("Model, vectorizer, or label encoder is not trained.")
+            
+            if not os.path.exists("./custom_model/"):
+                os.makedirs("./custom_model/") 
 
             # Save the Random Forest model
             with open(model_path, 'wb') as model_file:
@@ -116,9 +123,9 @@ class CustomDiseasePredicatotr(DiseasePredictor):
         except Exception as e:
             print(f"An error occurred while saving the model: {e}")
 
-    def load_model(self, model_path: str = 'model.pkl', 
-                   vectorizer_path: str = 'vectorizer.pkl', 
-                   encoder_path: str = 'label_encoder.pkl') -> None:
+    def load_model(self, model_path: str = './custom_model/model.pkl', 
+                   vectorizer_path: str = './custom_model/vectorizer.pkl', 
+                   encoder_path: str = './custom_model/label_encoder.pkl') -> None:
         """
         Loads the trained model, vectorizer, and encoder from disk with default filenames.
         Args:
@@ -160,7 +167,7 @@ class CustomDiseasePredicatotr(DiseasePredictor):
             print(f"An error occurred while loading the model: {e}")
 
     
-    def predict(self, input_list: List[str], top_n: int = 5) -> List[List[Tuple[str, str]]]:
+    def predict(self, input_list: List[str], top_n: int = 3) -> List[List[Tuple[str, str]]]:
         """
         Predicts the top N diseases for a list of input symptoms.
         Args:
@@ -215,8 +222,8 @@ class CustomDiseasePredicatotr(DiseasePredictor):
 model = CustomDiseasePredicatotr(model=RandomForestClassifier)
 
 
-input_list = ["Sneezing", "Runny nose", "Sore throat", "Cough"]
+symptoms = ["Patient 1: A 35-year-old male presenting with a persistent dry cough, shortness of breath, chest tightness, and fever for the past 4 days. No prior history of asthma or allergies."]
 
-input_string = " ".join(input_list)
 
-print(model.predict([input_string]))
+
+print(model.predict(symptoms))

@@ -12,13 +12,13 @@ import pickle
 import pandas as pd
 import numpy as np
 
-from base_disease_predicator import DiseasePredictor
+from base_disease_predictor import DiseasePredictor
 
 
 
 
 
-class CustomDiseasePredicatotr(DiseasePredictor):
+class CustomDiseasePredictor(DiseasePredictor):
 
     def __init__(self, df: Any= pd.read_csv('./datasets/processed_dataset.csv') , model: Type[Any] = RandomForestClassifier, model_params: dict = None):
         """
@@ -45,12 +45,12 @@ class CustomDiseasePredicatotr(DiseasePredictor):
         """
         try:
             # Ensure the necessary columns are present
-            if 'Symptoms' not in self.df or 'Disease' not in self.df:
+            if 'Symptoms' not in self.df or 'Disease_Class' not in self.df:
                 raise ValueError("Input DataFrame must contain 'Symptoms' and 'Disease' columns.")
 
             # Step 1: Extract features and target
             X = self.df['Symptoms']
-            y = self.df['Disease']
+            y = self.df['Disease_Class']
 
             # Step 2: Vectorize the symptoms using TF-IDF
             vectorizer = TfidfVectorizer()
@@ -219,11 +219,11 @@ class CustomDiseasePredicatotr(DiseasePredictor):
             return {"error": str(e)}
         
 
-model = CustomDiseasePredicatotr(model=RandomForestClassifier)
+# model = CustomDiseasePredictor()
 
 
-symptoms = ["Patient 1: A 35-year-old male presenting with a persistent dry cough, shortness of breath, chest tightness, and fever for the past 4 days. No prior history of asthma or allergies."]
+# symptoms = ["Patient 1: A 35-year-old male presenting with a persistent dry cough, shortness of breath, chest tightness, and fever for the past 4 days. No prior history of asthma or allergies."]
 
 
 
-print(model.predict(symptoms))
+# print(model.predict(symptoms))

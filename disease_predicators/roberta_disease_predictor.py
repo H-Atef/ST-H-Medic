@@ -10,7 +10,7 @@ logging.set_verbosity_error()
 
 from transformers import pipeline
 from typing import List, Any, Tuple
-from base_disease_predicator import DiseasePredictor
+from base_disease_predictor import DiseasePredictor
 
 
 NLP_MODEL=pipeline("zero-shot-classification", model="facebookai/roberta-large-mnli")
@@ -71,7 +71,7 @@ class RobertaDiseasePredictor(DiseasePredictor):
         with probabilities as percentages.
         Args:
             symptoms_list: A list of strings, each containing a list of symptoms to classify.
-            top_n: The number of top predictions to return for each symptom string (default is 5).
+            top_n: The number of top predictions to return for each symptom string (default is 3).
         Returns:
             A list of lists, where each inner list contains tuples of predicted diseases and their probabilities 
             in percentage form for a corresponding symptom string.
@@ -101,14 +101,14 @@ class RobertaDiseasePredictor(DiseasePredictor):
             return {"error": str(e)}
 
 
-# Initialize the predictor
-predictor = RobertaDiseasePredictor()
+# # Initialize the predictor
+# predictor = RobertaDiseasePredictor()
 
-symptoms = ["Patient 1: A 35-year-old male presenting with a persistent dry cough, shortness of breath, chest tightness, and fever for the past 4 days. No prior history of asthma or allergies."]
+# symptoms = ["Patient 1: A 35-year-old male presenting with a persistent dry cough, shortness of breath, chest tightness, and fever for the past 4 days. No prior history of asthma or allergies."]
 
-# Predict the top 3 diseases
-top_3_predictions = predictor.predict(symptoms_list=symptoms)
+# # Predict the top 3 diseases
+# top_3_predictions = predictor.predict(symptoms_list=symptoms)
 
-# Display the top 3 predicted diseases
-print("Top 3 Predicted Diseases:", top_3_predictions)
+# # Display the top 3 predicted diseases
+# print("Top 3 Predicted Diseases:", top_3_predictions)
 

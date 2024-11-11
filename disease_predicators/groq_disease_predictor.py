@@ -1,6 +1,6 @@
 from sklearn.base import ClassifierMixin
 from typing import Tuple,List,Type
-from base_disease_predicator import DiseasePredictor
+from base_disease_predictor import DiseasePredictor
 from ai_model_auth import API_KEY
 from groq import Groq
 
@@ -112,6 +112,6 @@ symptoms = [
 ]
 
 
-# Make a prediction
-predictions = predictor.predict(symptoms_list=symptoms)
-print(predictions)
+# # Make a prediction
+# predictions = predictor.predict(symptoms_list=symptoms)
+# print(predictions)

@@ -206,11 +206,11 @@ disease_classes = {
     'Diabetes & Metabolic Disorders (Type 2 Diabetes, Hypertension, Obesity, Hyperthyroidism, Hypothyroidism)': [
         'Diabetes', 'Hypothyroidism', 'Hyperthyroidism', 'Hypoglycemia'
     ],
-    'Headache & Migraines (Pain relievers, triptans, prevention)': [
+    'Headache & Migraines': [
         'Migraine', '(vertigo) Paroymsal  Positional Vertigo', 'Headache'
     ],
     'Respiratory Diseases (Asthma, COPD, Pneumonia, Bronchitis, COVID)': [
-        'Bronchial Asthma', 'Pneumonia', 'Common Cold'
+        'Bronchial Asthma', 'Pneumonia'
     ],
     'Gastrointestinal Disorders (Diarrhea, Gastroenteritis, Stomach Ulcer, Peptic Ulcer Disease, GERD)': [
         'Gastroenteritis', 'GERD', 'Peptic ulcer diseae', 'Chronic cholestasis', 'Jaundice', 'Dimorphic hemmorhoids(piles)','Stomach Ulcer', 'Diarrhea'

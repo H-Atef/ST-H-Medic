@@ -130,3 +130,167 @@ active_ingredients_list = [
     ('Furosemide', 'Spironolactone', '-', 'Heart Failure'),
     ('Furosemide', 'Spironolactone', '-', 'Chronic Kidney Disease')
 ]
+
+disease_classes = {
+    'Liver Diseases (Hepatitis B, Hepatitis C, Alcoholic Hepatitis, Chronic Hepatitis)': [
+        'Hepatitis B', 'Hepatitis C', 'Hepatitis D', 'Hepatitis E', 'Alcoholic Hepatitis', 'Hepatitis A', 'Chronic Hepatitis', 'Cirrhosis'
+    ],
+    'Cardiovascular Diseases (Heart Disease, Stroke, Heart Attack)': [
+        'Cardiovascular Disease', 'Heart Disease', 'Stroke', 'Heart Attack', 'Atrial Fibrillation', 'Hyperlipidemia', 'Hypertension', 'Heart Failure', 'Angina'
+    ],
+    'Diabetes & Metabolic Disorders (Type 2 Diabetes, Hypertension, Obesity, Hyperthyroidism, Hypothyroidism)': [
+        'Diabetes', 'Type 2 Diabetes', 'Type 1 Diabetes', 'Hypothyroidism', 'Goiter', 'Hypertension', 'Obesity', 'Hyperthyroidism', 'Hyperlipidemia', 'Fatigue'
+    ],
+    'Headache & Migraines': [
+        'Headache', 'Migraine', 'Osteoarthritis', 'Cervical Spondylosis'
+    ],
+    'Respiratory Diseases (Asthma, COPD, Pneumonia, Bronchitis, COVID)': [
+        'Asthma', 'Chronic Obstructive Pulmonary Disease (COPD)', 'Bronchitis', 'Chronic Bronchitis', 'Emphysema', 'Pneumonia', 'Respiratory Infections', 'Pulmonary Embolism', 'Common Cold'
+    ],
+    'Gastrointestinal Disorders (Diarrhea, Gastroenteritis, Stomach Ulcer, Peptic Ulcer Disease, GERD)': [
+        'Diarrhea', 'Gastroenteritis', 'Stomach Ulcer', 'Peptic Ulcer Disease', 'GERD', 'Irritable Bowel Syndrome', 'Crohn’s Disease'
+    ],
+    'Infectious Diseases (Tuberculosis, Dengue, Typhoid, Malaria)': [
+        'Malaria', 'Typhoid', 'Urinary Tract Infection', 'Bacterial Infections', 'Respiratory Infections', 'Pneumonia', 'Bronchitis', 'Dengue', 'HIV/AIDS', 'Tuberculosis'
+    ],
+    'Skin Disorders (Acne, Psoriasis, Impetigo, Fungal Infections)': [
+        'Acne', 'Psoriasis', 'Wrinkles', 'Fungal Infections', 'Vaginal Yeast Infection', 'Athlete’s Foot', 'Impetigo', 'Skin Infections', 'Eczema', 'Dermatitis', 'Rosacea', 'Warts'
+    ],
+    'Allergic & Autoimmune Diseases (Allergy, Drug Reaction)': [
+        'Allergy', 'Drug Reaction', 'Allergic Rhinitis'
+    ],
+    'Common Cold (Upper Respiratory Tract Infection)': [
+        'Common Cold'
+    ],
+    'Musculoskeletal Disorders (Arthritis, Osteoarthritis)': [
+        'Osteoarthritis', 'Arthritis', 'Cervical Spondylosis'
+    ],
+    'Neurological Disorders (Paralysis, Brain Hemorrhage)': [
+        'Paralysis', 'Brain Hemorrhage'
+    ],
+    'Other Conditions (Urinary Tract Infection)': [
+        'Urinary Tract Infection'
+    ],
+    'Cancer (Breast Cancer, Lung Cancer, Leukemia, Prostate Cancer, Colorectal Cancer, Ovarian Cancer, Skin Cancer, Lymphoma)': [
+        'Rheumatoid Arthritis', 'Breast Cancer', 'Lung Cancer', 'Leukemia', 'Prostate Cancer', 'Colorectal Cancer', 'Ovarian Cancer', 'Skin Cancer', 'Lymphoma'
+    ],
+    'Depression & Mental Health Disorders (Depression, Anxiety, Bipolar Disorder, PTSD, Schizophrenia, OCD)': [
+        'Depression', 'Anxiety', 'Bipolar Disorder', 'PTSD', 'Schizophrenia', 'OCD'
+    ],
+    'COVID': [
+        'COVID'
+    ],
+    'Additional related categories': [
+        'Anemia', 'Fatigue', 'Nerve Disorders', 'Immune System Support', 'Neutropenia', 'Gout', 'Hyperuricemia', 'Heart Failure', 'Chronic Kidney Disease'
+    ]
+}
+
+top_diseases_classes = {
+    'Liver Diseases (Hepatitis B, Hepatitis C, Alcoholic Hepatitis, Chronic Hepatitis)': [
+        'Hepatitis B', 'Hepatitis C', 'Cirrhosis'
+    ],
+    'Cardiovascular Diseases (Heart Disease, Stroke, Heart Attack)': [
+        'Cardiovascular Disease', 'Heart Disease', 'Hypertension'
+    ],
+    'Diabetes & Metabolic Disorders (Type 2 Diabetes, Hypertension, Obesity, Hyperthyroidism, Hypothyroidism)': [
+        'Type 2 Diabetes', 'Hypertension', 'Obesity'
+    ],
+    'Headache & Migraines': [ 
+        'Migraine', 'Headache', 'Osteoarthritis'
+    ],
+    'Respiratory Diseases (Asthma, COPD, Pneumonia, Bronchitis, COVID)': [
+        'Asthma', 'Chronic Obstructive Pulmonary Disease (COPD)', 'Pneumonia','Common Cold'
+    ],
+    'Gastrointestinal Disorders (Diarrhea, Gastroenteritis, Stomach Ulcer, Peptic Ulcer Disease, GERD)': [
+        'Diarrhea', 'Gastroenteritis', 'GERD'
+    ],
+    'Infectious Diseases (Tuberculosis, Dengue, Typhoid, Malaria)': [
+        'Tuberculosis', 'Dengue', 'Malaria'
+    ],
+    'Skin Disorders (Acne, Psoriasis, Impetigo, Fungal Infections)': [
+        'Acne', 'Psoriasis', 'Fungal Infections'
+    ],
+    'Allergic & Autoimmune Diseases (Allergy, Drug Reaction)': [
+        'Allergy', 'Drug Reaction', 'Allergic Rhinitis'
+    ],
+    'Common Cold (Upper Respiratory Tract Infection)': [
+        'Common Cold'
+    ],
+    'Musculoskeletal Disorders (Arthritis, Osteoarthritis)': [
+        'Osteoarthritis', 'Arthritis', 'Cervical Spondylosis'
+    ],
+    'Neurological Disorders (Paralysis, Brain Hemorrhage)': [
+        'Paralysis', 'Brain Hemorrhage'
+    ],
+    'Other Conditions (Urinary Tract Infection)': [
+        'Urinary Tract Infection'
+    ],
+    'Cancer (Breast Cancer, Lung Cancer, Leukemia, Prostate Cancer, Colorectal Cancer, Ovarian Cancer, Skin Cancer, Lymphoma)': [
+        'Breast Cancer', 'Lung Cancer', 'Prostate Cancer'
+    ],
+    'Depression & Mental Health Disorders (Depression, Anxiety, Bipolar Disorder, PTSD, Schizophrenia, OCD)': [
+        'Depression', 'Anxiety', 'Bipolar Disorder'
+    ],
+    'COVID': [
+        'COVID'
+    ],
+    'Additional related categories': [
+        'Anemia', 'Fatigue', 'Chronic Kidney Disease'
+    ]
+}
+
+
+active_ingredients = {
+    'Liver Diseases (Hepatitis B, Hepatitis C, Alcoholic Hepatitis, Chronic Hepatitis)': [
+        'Entecavir (first-line)', 'Sofosbuvir (second-line)', 'Ribavirin (third-line)'
+    ],
+    'Cardiovascular Diseases (Heart Disease, Stroke, Heart Attack)': [
+        'Aspirin (first-line)', 'Statins (second-line)', 'Beta-blockers (third-line)'
+    ],
+    'Diabetes & Metabolic Disorders (Type 2 Diabetes, Hypertension, Obesity, Hyperthyroidism, Hypothyroidism)': [
+        'Metformin (first-line)', 'Insulin (second-line)', 'SGLT2 Inhibitors (third-line)'
+    ],
+    'Headache & Migraines': [
+        'Sumatriptan (first-line)', 'NSAIDs (second-line)', 'Verapamil (third-line)'
+    ],
+    'Respiratory Diseases (Asthma, COPD, Pneumonia, Bronchitis, COVID)': [
+        'Salbutamol (first-line)', 'Budesonide (second-line)', 'Theophylline (third-line)'
+    ],
+    'Gastrointestinal Disorders (Diarrhea, Gastroenteritis, Stomach Ulcer, Peptic Ulcer Disease, GERD)': [
+        'Omeprazole (first-line)', 'Ranitidine (second-line)', 'Loperamide (third-line)'
+    ],
+    'Infectious Diseases (Tuberculosis, Dengue, Typhoid, Malaria)': [
+        'Isoniazid (first-line)', 'Rifampicin (second-line)', 'Artesunate (third-line)'
+    ],
+    'Skin Disorders (Acne, Psoriasis, Impetigo, Fungal Infections)': [
+        'Benzoyl Peroxide (first-line)', 'Topical Steroids (second-line)', 'Itraconazole (third-line)'
+    ],
+    'Allergic & Autoimmune Diseases (Allergy, Drug Reaction)': [
+        'Loratadine (first-line)', 'Cetirizine (second-line)', 'Prednisone (third-line)'
+    ],
+    'Common Cold (Upper Respiratory Tract Infection)': [
+        'Paracetamol (first-line)', 'Ibuprofen (second-line)', 'Nasal decongestants (third-line)'
+    ],
+    'Musculoskeletal Disorders (Arthritis, Osteoarthritis)': [
+        'Ibuprofen (first-line)', 'Methotrexate (second-line)', 'Hydrocodone (third-line)'
+    ],
+    'Neurological Disorders (Paralysis, Brain Hemorrhage)': [
+        'Tissue Plasminogen Activator (first-line)', 'Heparin (second-line)', 'Clonazepam (third-line)'
+    ],
+    'Other Conditions (Urinary Tract Infection)': [
+        'Ciprofloxacin (first-line)', 'Amoxicillin (second-line)', 'Nitrofurantoin (third-line)'
+    ],
+    'Cancer (Breast Cancer, Lung Cancer, Leukemia, Prostate Cancer, Colorectal Cancer, Ovarian Cancer, Skin Cancer, Lymphoma)': [
+        'Tamoxifen (first-line)', 'Docetaxel (second-line)', 'Imatinib (third-line)'
+    ],
+    'Depression & Mental Health Disorders (Depression, Anxiety, Bipolar Disorder, PTSD, Schizophrenia, OCD)': [
+        'Sertraline (first-line)', 'Citalopram (second-line)', 'Lithium (third-line)'
+    ],
+    'COVID': [
+        'Remdesivir (first-line)', 'Dexamethasone (second-line)', 'Tocilizumab (third-line)'
+    ],
+    'Additional related categories': [
+        'Iron Supplements (first-line)', 'Erythropoietin (second-line)', 'Dialysis (third-line)'
+    ]
+}
+

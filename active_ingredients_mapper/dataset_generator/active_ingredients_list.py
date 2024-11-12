@@ -240,7 +240,7 @@ top_diseases_classes = {
 }
 
 
-active_ingredients = {
+diseases_cls_to_active_ingredients= {
     'Liver Diseases (Hepatitis B, Hepatitis C, Alcoholic Hepatitis, Chronic Hepatitis)': [
         'Entecavir (first-line)', 'Sofosbuvir (second-line)', 'Ribavirin (third-line)'
     ],

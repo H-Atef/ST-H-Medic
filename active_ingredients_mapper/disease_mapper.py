@@ -2,6 +2,7 @@
 from dataset_generator.active_ingredients_list import diseases_cls_to_active_ingredients
 import pandas as pd
 from typing import List,Tuple,Dict
+from ai_mapper import GroqActvIngMapper
 
 
 
@@ -13,6 +14,7 @@ class DiseaseActvIngMapper:
                  ):
         self.df=df
         self.predicted_diseases=predicted_diseases
+        
 
     
     def extract_diseases_only(self,predicted_diseases:List[List[Tuple[str,str]]]=None)->List:
@@ -21,7 +23,15 @@ class DiseaseActvIngMapper:
         extarcted_diseases_list=[disease[0] for tuple in predicted_diseases for disease in tuple]
 
         return extarcted_diseases_list
+    
 
+    def check_and_filter_new_diseases(self,diseases_list:List=None)->List:
+        filtered_list=[disease for disease in diseases_list if
+                        not disease in diseases_cls_to_active_ingredients and
+                        not disease in list(self.df["Diseases"])
+                        ]
+        
+        return filtered_list
 
 
     def map_pridected_diseases_to_actv(self,predicted_diseases:List[List[Tuple[str,str]]]=None)->Dict:
@@ -50,6 +60,15 @@ class DiseaseActvIngMapper:
 
             self.map_diseases(disease,active_ingredients_output_dict)
 
+
+        filtered_list=self.check_and_filter_new_diseases(extarcted_diseases_list)
+
+        if not filtered_list ==[]:
+            new_diseses_dict=self.ai_map_disease_to_actv_ing(filtered_list)
+
+            if not new_diseses_dict=={}:
+                active_ingredients_output_dict.update(new_diseses_dict)
+                self.save_new_disease_records(new_diseses_dict)
             
 
         return active_ingredients_output_dict
@@ -64,7 +83,7 @@ class DiseaseActvIngMapper:
          
 
 
-    def map_diseases(self,disease:str,actv_ing_output:Dict):
+    def map_diseases(self,disease:str,actv_ing_output:Dict)->Dict:
 
         if disease in list(self.df["Diseases"]) and not disease in diseases_cls_to_active_ingredients.keys():
                 row=self.df[self.df["Diseases"]==disease]
@@ -73,18 +92,54 @@ class DiseaseActvIngMapper:
 
         return actv_ing_output
     
-    def map_new_disease(self,disease:str,actv_ing_output:Dict):
-        pass
+    def save_new_disease_records(self,data_dict:Dict=None)->pd.DataFrame:
 
-    def add_new_disease_to_dataset(self,new_actv_ing_dict:Dict):
-        pass
+        try:
+
+            new_df = pd.DataFrame.from_dict(
+                            {disease: {
+                                'Primary Active Ingredient': ingredients[0] if len(ingredients) > 0 else None,
+                                'Alternative Treatment 1': ingredients[1] if len(ingredients) > 1 else None,
+                                'Alternative Treatment 2': ingredients[2] if len(ingredients) > 2 else None,
+                                'Diseases': disease
+                            } for disease, ingredients in data_dict.items()},
+                            orient='index'
+                        ).reset_index(drop=False)
+
+            try:
+                ai_df = pd.read_csv("./datasets/ai_active_ingredients_diseases.csv")
+            except FileNotFoundError:
+                # If file is not found, create an empty DataFrame with the specified columns
+                ai_df = pd.DataFrame(columns=[
+                    'Primary Active Ingredient','Alternative Treatment 1', 
+                    'Alternative Treatment 2', 'Diseases'])
+
+            # Append the new data to the existing DataFrame
+            self.df = pd.concat([self.df, new_df], ignore_index=True)
+            ai_df = pd.concat([ai_df, new_df], ignore_index=True)
+
+            self.df.drop('index',axis=1,inplace=True)
+            ai_df.drop('index',axis=1,inplace=True)
+
+            self.df.to_csv("./datasets/active_ingredients_diseases.csv",index=False)
+            ai_df.to_csv("./datasets/ai_active_ingredients_diseases.csv",index=False)
+
+        except Exception as e:
+            print(e)
+
+
+    def ai_map_disease_to_actv_ing(self,diseases:List)->Dict:
+        groq_mapper=GroqActvIngMapper()
+        result=groq_mapper.map_diseases(diseases_list=diseases)
+        return result
 
 
 
 output_example= [[('Gastrointestinal Disorders (Diarrhea, Gastroenteritis, Stomach Ulcer, Peptic Ulcer Disease, GERD)', '53.00%'),
                   ('Respiratory Diseases (Asthma, COPD, Pneumonia, Bronchitis, COVID)', '20.00%'), 
                   ('Skin Disorders (Acne, Psoriasis, Impetigo, Fungal Infections)', '11.00%'),
-                  ("Acne","%20")]]
+                  ("Common Cold","%10")
+                  ]]
 
 actv_mapper=DiseaseActvIngMapper()
 
@@ -92,56 +147,3 @@ print(actv_mapper.map_pridected_diseases_to_actv(output_example))
 
 
 
-# #Extracting diseases Only from the input using list comperhension
-# extarcted_diseases_list=[disease[0] for tuple in output_example for disease in tuple]
-
-
-
-# #The final output dictionary that includes all mapped diseases
-# active_ingredients_output_dict={}
-
-# #A list for including all mapped diseases  
-# mapped_diseases=[]
-
-
-# #A loop for mapping extracted diseases with their active ingredients
-# for disease in extarcted_diseases_list:
-#     if disease in diseases_cls_to_active_ingredients.keys():
-#         active_ingredients_output_dict[disease.split("(")[0].strip()]=diseases_cls_to_active_ingredients[disease]
-#         mapped_diseases.append(disease)
-
-
-# #Removing all mapped diseases and updating the diseases list
-# extarcted_diseases_list=[disease for disease in extarcted_diseases_list if not disease in mapped_diseases]
-
-
-# #The predictors outputs could be disease classes or could be just diseases
-# #Assuming there is a mixture of them both, so the diseases if found only should be mapped too
-
-# #Checking if there is any disease left "As disease classes already mapped"
-# if not extarcted_diseases_list==[]:
-    
-#     #A loop for checking and mapping the detected diseases by active_ingredients dataset
-#     for disease in extarcted_diseases_list:
-#         df=pd.read_csv("./datasets/active_ingredients_diseases.csv")
-        
-#         if disease in list(df["Diseases"]):
-#             row=df[df["Diseases"]==disease]
-#             row=row.to_dict(orient="list")
-#             mapped_diseases.append(disease)
-#             active_ingredients_output_dict[disease]=[x[1][0] for x in list(row.items())[:3]]
-
-        
-# #Removing all mapped diseases and updating the diseases list
-# extarcted_diseases_list=[x for x in extarcted_diseases_list if not x in mapped_diseases]
-
-
-# #Assuming that there is a disease or there are some diseases left after updating
-# #That means that this disease is not found in the dataset 
-# #So, groq active ingredients mapper will be used in order to get map these diseases to their actv_ing
-# #In addition, adding them to the dataset
-# if not extarcted_diseases_list==[]:
-#     pass
-
-
-# print(active_ingredients_output_dict)

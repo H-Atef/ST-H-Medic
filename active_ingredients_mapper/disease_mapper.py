@@ -3,6 +3,7 @@ from dataset_generator.active_ingredients_list import diseases_cls_to_active_ing
 import pandas as pd
 from typing import List,Tuple,Dict
 from ai_mapper import GroqActvIngMapper
+from fuzzywuzzy import fuzz
 
 
 
@@ -25,10 +26,12 @@ class DiseaseActvIngMapper:
         return extarcted_diseases_list
     
 
-    def check_and_filter_new_diseases(self,diseases_list:List=None)->List:
+    def check_and_filter_new_diseases(self,diseases_list:List[str]=None)->List:
+        lower_case_disease_classes=[x.lower() for x in diseases_cls_to_active_ingredients.keys()]
+
         filtered_list=[disease for disease in diseases_list if
-                        not disease in diseases_cls_to_active_ingredients and
-                        not disease in list(self.df["Diseases"])
+                        not disease.lower() in lower_case_disease_classes and
+                        not disease.lower() in list(self.df["Diseases"].str.lower())
                         ]
         
         return filtered_list
@@ -75,20 +78,39 @@ class DiseaseActvIngMapper:
 
 
     def map_diseases_cls(self,disease:str,actv_ing_output:Dict)->Dict:
-        if disease in diseases_cls_to_active_ingredients.keys():
+
+        lower_case_disease_classes=[x.lower() for x in diseases_cls_to_active_ingredients.keys()]
+
+        if disease.lower() in lower_case_disease_classes:
             actv_ing_output[disease.split("(")[0].strip()]=diseases_cls_to_active_ingredients[disease]
         
         return actv_ing_output
         
+    def is_similar(treatment1: str, treatment2: str, threshold=90) -> bool:
+        return fuzz.ratio(treatment1.lower(), treatment2.lower()) >= threshold
          
 
 
     def map_diseases(self,disease:str,actv_ing_output:Dict)->Dict:
 
-        if disease in list(self.df["Diseases"]) and not disease in diseases_cls_to_active_ingredients.keys():
-                row=self.df[self.df["Diseases"]==disease]
+        lower_case_disease_classes=[x.lower() for x in diseases_cls_to_active_ingredients.keys()]
+
+        if disease.lower() in list(self.df["Diseases"].str.lower()) and not disease.lower() in lower_case_disease_classes:
+                
+                row=self.df[self.df["Diseases"].str.lower()==disease.lower()]
                 row=row.to_dict(orient="list")
-                actv_ing_output[disease]=[x[1][0] for x in list(row.items())[:3]]
+
+                # Extract the treatments: Primary, Alternative 1, and Alternative 2
+                treatments = row['Primary Active Ingredient'] + \
+                            row['Alternative Treatment 1'] + \
+                            row['Alternative Treatment 2']
+                
+                # Remove duplicates by converting to a set, then back to a list
+                unique_treatments = list(set(treatments))
+
+              
+
+                actv_ing_output[disease]=unique_treatments
 
         return actv_ing_output
     
@@ -138,7 +160,7 @@ class DiseaseActvIngMapper:
 output_example= [[('Gastrointestinal Disorders (Diarrhea, Gastroenteritis, Stomach Ulcer, Peptic Ulcer Disease, GERD)', '53.00%'),
                   ('Respiratory Diseases (Asthma, COPD, Pneumonia, Bronchitis, COVID)', '20.00%'), 
                   ('Skin Disorders (Acne, Psoriasis, Impetigo, Fungal Infections)', '11.00%'),
-                  ("Common Cold","%10")
+                  ("common cold","10%")
                   ]]
 
 actv_mapper=DiseaseActvIngMapper()

@@ -1,16 +1,21 @@
 
-from dataset_generator.active_ingredients_list import diseases_cls_to_active_ingredients
 import pandas as pd
 from typing import List,Tuple,Dict
-from ai_mapper import GroqActvIngMapper
 from fuzzywuzzy import fuzz
 
+import importlib
 
+module1='active_ingredients_mapper.dataset_generator.active_ingredients_list'
+module2='active_ingredients_mapper.ai_mapper'
+path_actv="./active_ingredients_mapper"
+
+actv=importlib.import_module(module1)
+actv_ai=importlib.import_module(module2)
 
 class DiseaseActvIngMapper:
 
     def __init__(self,
-                 df:pd.DataFrame=pd.read_csv("./datasets/active_ingredients_diseases.csv"),
+                 df:pd.DataFrame=pd.read_csv(f"{path_actv}/datasets/active_ingredients_diseases.csv"),
                  predicted_diseases:List[List[Tuple[str,str]]]=None
                  ):
         self.df=df
@@ -19,6 +24,10 @@ class DiseaseActvIngMapper:
 
     
     def extract_diseases_only(self,predicted_diseases:List[List[Tuple[str,str]]]=None)->List:
+
+        if type(predicted_diseases[0])==str or predicted_diseases==[]:
+            return predicted_diseases
+
         
         #Extracting diseases Only from the input using list comperhension
         extarcted_diseases_list=[disease[0] for tuple in predicted_diseases for disease in tuple]
@@ -27,7 +36,7 @@ class DiseaseActvIngMapper:
     
 
     def check_and_filter_new_diseases(self,diseases_list:List[str]=None)->List:
-        lower_case_disease_classes=[x.lower() for x in diseases_cls_to_active_ingredients.keys()]
+        lower_case_disease_classes=[x.lower() for x in actv.diseases_cls_to_active_ingredients.keys()]
 
         filtered_list=[disease for disease in diseases_list if
                         not disease.lower() in lower_case_disease_classes and
@@ -79,10 +88,10 @@ class DiseaseActvIngMapper:
 
     def map_diseases_cls(self,disease:str,actv_ing_output:Dict)->Dict:
 
-        lower_case_disease_classes=[x.lower() for x in diseases_cls_to_active_ingredients.keys()]
+        lower_case_disease_classes=[x.lower() for x in actv.diseases_cls_to_active_ingredients.keys()]
 
         if disease.lower() in lower_case_disease_classes:
-            actv_ing_output[disease.split("(")[0].strip()]=diseases_cls_to_active_ingredients[disease]
+            actv_ing_output[disease.split("(")[0].strip()]=actv.diseases_cls_to_active_ingredients[disease]
         
         return actv_ing_output
         
@@ -93,7 +102,7 @@ class DiseaseActvIngMapper:
 
     def map_diseases(self,disease:str,actv_ing_output:Dict)->Dict:
 
-        lower_case_disease_classes=[x.lower() for x in diseases_cls_to_active_ingredients.keys()]
+        lower_case_disease_classes=[x.lower() for x in actv.diseases_cls_to_active_ingredients.keys()]
 
         if disease.lower() in list(self.df["Diseases"].str.lower()) and not disease.lower() in lower_case_disease_classes:
                 
@@ -129,7 +138,7 @@ class DiseaseActvIngMapper:
                         ).reset_index(drop=False)
 
             try:
-                ai_df = pd.read_csv("./datasets/ai_active_ingredients_diseases.csv")
+                ai_df = pd.read_csv(f"{path_actv}/datasets/ai_active_ingredients_diseases.csv")
             except FileNotFoundError:
                 # If file is not found, create an empty DataFrame with the specified columns
                 ai_df = pd.DataFrame(columns=[
@@ -143,29 +152,29 @@ class DiseaseActvIngMapper:
             self.df.drop('index',axis=1,inplace=True)
             ai_df.drop('index',axis=1,inplace=True)
 
-            self.df.to_csv("./datasets/active_ingredients_diseases.csv",index=False)
-            ai_df.to_csv("./datasets/ai_active_ingredients_diseases.csv",index=False)
+            self.df.to_csv(f"{path_actv}/datasets/active_ingredients_diseases.csv",index=False)
+            ai_df.to_csv(f"{path_actv}/datasets/ai_active_ingredients_diseases.csv",index=False)
 
         except Exception as e:
             print(e)
 
 
     def ai_map_disease_to_actv_ing(self,diseases:List)->Dict:
-        groq_mapper=GroqActvIngMapper()
+        groq_mapper=actv_ai.GroqActvIngMapper()
         result=groq_mapper.map_diseases(diseases_list=diseases)
         return result
 
 
 
-output_example= [[('Gastrointestinal Disorders (Diarrhea, Gastroenteritis, Stomach Ulcer, Peptic Ulcer Disease, GERD)', '53.00%'),
-                  ('Respiratory Diseases (Asthma, COPD, Pneumonia, Bronchitis, COVID)', '20.00%'), 
-                  ('Skin Disorders (Acne, Psoriasis, Impetigo, Fungal Infections)', '11.00%'),
-                  ("common cold","10%")
-                  ]]
+# output_example= [[('Gastrointestinal Disorders (Diarrhea, Gastroenteritis, Stomach Ulcer, Peptic Ulcer Disease, GERD)', '53.00%'),
+#                   ('Respiratory Diseases (Asthma, COPD, Pneumonia, Bronchitis, COVID)', '20.00%'), 
+#                   ('Skin Disorders (Acne, Psoriasis, Impetigo, Fungal Infections)', '11.00%'),
+#                   ("common cold","10%")
+#                   ]]
 
-actv_mapper=DiseaseActvIngMapper()
+# actv_mapper=DiseaseActvIngMapper()
 
-print(actv_mapper.map_pridected_diseases_to_actv(output_example))
+# print(actv_mapper.map_pridected_diseases_to_actv(output_example))
 
 
 

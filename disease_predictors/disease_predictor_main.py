@@ -1,9 +1,8 @@
-import os
-from typing import Type, Dict, Any,Tuple,List
-from base_disease_predictor import DiseasePredictor
-from custom_disease_predictor import CustomDiseasePredictor
-from groq_disease_predictor import GroqDiseasePredictor
-from roberta_disease_predictor import RobertaDiseasePredictor
+import importlib
+from typing import Type, Dict, Any, List, Tuple
+from disease_predictors.base_disease_predictor import DiseasePredictor  # Keep this import for the base class
+
+path_d='disease_predictors.'
 
 class DiseasePredictionContext:
     """
@@ -12,20 +11,15 @@ class DiseasePredictionContext:
 
     def __init__(self):
         """
-        Initializes the context with a dictionary that maps each predictor to a string identifier.
-        
-        Args:
-            model_dir: Directory where models will be saved or loaded from.
+        Initializes the context with a dictionary that maps each predictor to their corresponding module and class.
         """
-        # Dictionary to map predictor names to their corresponding predictor classes
-        self.predictor_map: Dict[str, Type[DiseasePredictor]] = {
-            'custom': CustomDiseasePredictor,
-            'groq': GroqDiseasePredictor,
-            'roberta': RobertaDiseasePredictor,
+        # Dictionary to map predictor names to their corresponding module path and class name
+        self.predictor_map: Dict[str, str] = {
+            'custom': f'{path_d}custom_disease_predictor.CustomDiseasePredictor',
+            'groq': f'{path_d}groq_disease_predictor.GroqDiseasePredictor',
+            'roberta': f'{path_d}roberta_disease_predictor.RobertaDiseasePredictor',
         }
         self.current_predictor: DiseasePredictor = None
-
-        
 
     def set_predictor(self, predictor_name: str, **kwargs: Any) -> None:
         """
@@ -36,15 +30,22 @@ class DiseasePredictionContext:
             kwargs: Additional parameters required to initialize the predictor.
         """
         if predictor_name in self.predictor_map:
+            # Dynamically import the predictor class using importlib
+            module_path, class_name = self.predictor_map[predictor_name].rsplit('.', 1)
+            
+            # Import the module
+            module = importlib.import_module(module_path)
+            
+            # Get the class from the module
+            predictor_class = getattr(module, class_name)
+            
             # Instantiate the chosen predictor with the provided arguments
-            predictor_class = self.predictor_map[predictor_name]
             self.current_predictor = predictor_class(**kwargs)
             print(f"Switched to {predictor_name} predictor.")
         else:
             raise ValueError(f"Predictor {predictor_name} not found in the available strategies.")
 
-
-    def predict(self, symptoms_list: list, **kwargs: Any) ->  List[List[Tuple[str, str]]]:
+    def predict(self, symptoms_list: list, **kwargs: Any) -> List[List[Tuple[str, str]]]:
         """
         Makes predictions using the current selected predictor.
         
@@ -59,20 +60,3 @@ class DiseasePredictionContext:
             return self.current_predictor.predict(symptoms_list, **kwargs)
         else:
             raise RuntimeError("No predictor has been selected. Use set_predictor first.")
-
-
-
-
-# Initialize the context
-context = DiseasePredictionContext()
-
-
-pred=context.set_predictor('custom')
-
-
-# Use the loaded model to make predictions
-symptoms = [
-    "Patient 1: A 35-year-old male presenting with a persistent dry cough, shortness of breath, chest tightness, and fever for the past 4 days."
-]
-predictions = context.predict(symptoms)
-print("Top 3 Predictions:", predictions)

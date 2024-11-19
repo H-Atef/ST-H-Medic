@@ -43,5 +43,5 @@ class ActiveIngredientsDatasetGenerator:
             print(e)
             return pd.DataFrame({})
 
-# Generate the CSV file
-ActiveIngredientsDatasetGenerator.generate_csv_file()
+# # Generate the CSV file
+# ActiveIngredientsDatasetGenerator.generate_csv_file()

@@ -12,15 +12,16 @@ import pickle
 import pandas as pd
 import numpy as np
 
-from base_disease_predictor import DiseasePredictor
+import importlib
+
+module1='disease_predictors.base_disease_predictor'
+path="./disease_predictors"
 
 
 
+class CustomDiseasePredictor(importlib.import_module(module1).DiseasePredictor):
 
-
-class CustomDiseasePredictor(DiseasePredictor):
-
-    def __init__(self, df: Any= pd.read_csv('./datasets/processed_dataset.csv') , model: Type[Any] = RandomForestClassifier, model_params: dict = None):
+    def __init__(self, df: Any= pd.read_csv(f'{path}/datasets/processed_dataset.csv') , model: Type[Any] = RandomForestClassifier, model_params: dict = None):
         """
         Initializes the model with the dataframe and the type of machine learning model.
         Args:
@@ -88,9 +89,9 @@ class CustomDiseasePredictor(DiseasePredictor):
             return {"error": str(e)}
 
 
-    def save_model(self, model_path: str = './custom_model/model.pkl', 
-                   vectorizer_path: str = './custom_model/vectorizer.pkl', 
-                   encoder_path: str = './custom_model/label_encoder.pkl') -> None:
+    def save_model(self, model_path: str = f'{path}/custom_model/model.pkl', 
+                   vectorizer_path: str = f'{path}/custom_model/vectorizer.pkl', 
+                   encoder_path: str = f'{path}/custom_model/label_encoder.pkl') -> None:
         """
         Saves the trained model, vectorizer, and encoder to disk with default filenames.
         Args:
@@ -103,8 +104,8 @@ class CustomDiseasePredictor(DiseasePredictor):
             if not self.model or not self.vectorizer or not self.label_encoder:
                 raise RuntimeError("Model, vectorizer, or label encoder is not trained.")
             
-            if not os.path.exists("./custom_model/"):
-                os.makedirs("./custom_model/") 
+            if not os.path.exists(f"{path}/custom_model/"):
+                os.makedirs(f"{path}/custom_model/") 
 
             # Save the Random Forest model
             with open(model_path, 'wb') as model_file:
@@ -123,9 +124,9 @@ class CustomDiseasePredictor(DiseasePredictor):
         except Exception as e:
             print(f"An error occurred while saving the model: {e}")
 
-    def load_model(self, model_path: str = './custom_model/model.pkl', 
-                   vectorizer_path: str = './custom_model/vectorizer.pkl', 
-                   encoder_path: str = './custom_model/label_encoder.pkl') -> None:
+    def load_model(self, model_path: str = f'{path}/custom_model/model.pkl', 
+                   vectorizer_path: str = f'{path}/custom_model/vectorizer.pkl', 
+                   encoder_path: str = f'{path}/custom_model/label_encoder.pkl') -> None:
         """
         Loads the trained model, vectorizer, and encoder from disk with default filenames.
         Args:

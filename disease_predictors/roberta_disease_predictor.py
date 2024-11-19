@@ -10,12 +10,16 @@ logging.set_verbosity_error()
 
 from transformers import pipeline
 from typing import List, Any, Tuple
-from base_disease_predictor import DiseasePredictor
+
+import importlib
+module1='disease_predictors.base_disease_predictor'
+
+
 
 
 NLP_MODEL=pipeline("zero-shot-classification", model="facebookai/roberta-large-mnli")
 
-class RobertaDiseasePredictor(DiseasePredictor):
+class RobertaDiseasePredictor(importlib.import_module(module1).DiseasePredictor):
     """
     A concrete subclass implementing the methods for disease prediction using Facebook's RoBERTa model.
     """

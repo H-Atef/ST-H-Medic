@@ -1,7 +1,7 @@
 import pandas as pd
 from sklearn.utils import resample
 from itertools import combinations
-import common_diseases_list as cd
+import disease_predictors.common_diseases_list as cd
 
 class OriginalDatasetPre:
 
@@ -144,15 +144,15 @@ class OriginalDatasetPre:
 
 # Example usage:
 
-# Load the initial dataset
-df = pd.read_csv('./datasets/disease_symptom_dataset.csv')
+# # Load the initial dataset
+# df = pd.read_csv('./datasets/disease_symptom_dataset.csv')
 
-# Create an instance of the OriginalDatasetPre class
-pre = OriginalDatasetPre(df)
+# # Create an instance of the OriginalDatasetPre class
+# pre = OriginalDatasetPre(df)
 
-# Add new diseases (if any)
-new_diseases_list = cd.common_diseases_to_add  # Replace with your actual list of new diseases
-df = pre.process_dataset()
+# # Add new diseases (if any)
+# new_diseases_list = cd.common_diseases_to_add  # Replace with your actual list of new diseases
+# df = pre.process_dataset()
 
-# Output the balanced dataset
-print(df['Disease_Class'].value_counts())
+# # Output the balanced dataset
+# print(df['Disease_Class'].value_counts())

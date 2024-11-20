@@ -24,7 +24,7 @@ class DiseaseOutputProcessor:
             df = pd.DataFrame(flat_diseases, columns=["Disease", "Probability", "Case"])
             return df
         except Exception as e:
-            print(f"Error in predicted_diseases_to_df: {e}")
+            #print(f"Error in predicted_diseases_to_df: {e}")
             return pd.DataFrame(columns=["Disease", "Probability", "Case"])  # Empty DataFrame with headers
     
     def diseases_to_actv_df(self) -> pd.DataFrame:
@@ -45,7 +45,7 @@ class DiseaseOutputProcessor:
             df = pd.DataFrame(actv_data, columns=["Disease", "Active Ingredient", "Line"])
             return df
         except Exception as e:
-            print(f"Error in diseases_to_actv_df: {e}")
+            #print(f"Error in diseases_to_actv_df: {e}")
             return pd.DataFrame(columns=["Disease", "Active Ingredient", "Line"])  # Empty DataFrame with headers
     
     def diseases_to_med_df(self) -> pd.DataFrame:
@@ -67,18 +67,14 @@ class DiseaseOutputProcessor:
                     drug_names = ingredient_details.get("drug_name", ["-"] * max(len(ingredient_details.get("drug_name", [])), 1))
                     generic_names = ingredient_details.get("generic_name", ["-"] * max(len(ingredient_details.get("generic_name", [])), 1))
                     drug_classes = ingredient_details.get("drug_class", ["-"] * max(len(ingredient_details.get("drug_class", [])), 1))
-                    similars = ingredient_details.get("similars", ["-"] * max(len(ingredient_details.get("similars", [])), 1))
-                    alternatives = ingredient_details.get("alternatives", ["-"] * max(len(ingredient_details.get("alternatives", [])), 1))
                     
                     # Find the maximum length of all lists for this ingredient
-                    max_len = max(len(drug_names), len(generic_names), len(drug_classes), len(similars), len(alternatives))
+                    max_len = max(len(drug_names), len(generic_names), len(drug_classes))
                     
                     # Ensure all lists are of equal length by extending with '-'
                     drug_names.extend(["-"] * (max_len - len(drug_names)))
                     generic_names.extend(["-"] * (max_len - len(generic_names)))
                     drug_classes.extend(["-"] * (max_len - len(drug_classes)))
-                    similars.extend(["-"] * (max_len - len(similars)))
-                    alternatives.extend(["-"] * (max_len - len(alternatives)))
                     
                     # Add rows for each combination of drug and other attributes
                     for i in range(max_len):
@@ -87,14 +83,12 @@ class DiseaseOutputProcessor:
                             ingredient,
                             drug_names[i],    
                             generic_names[i],
-                            drug_classes[i],
-                            similars[i],
-                            alternatives[i]
+                            drug_classes[i]
                         ])
             
             # Convert the list of rows to a DataFrame
-            df = pd.DataFrame(data, columns=["Disease", "Active Ingredient", "Drug Name", "Generic Name", "Drug Class", "Similars", "Alternatives"])
+            df = pd.DataFrame(data, columns=["Disease", "Active Ingredient", "Drug Name", "Generic Name", "Drug Class"])
             return df
         except Exception as e:
-            print(f"Error in diseases_to_med_df: {e}")
-            return pd.DataFrame(columns=["Disease", "Active Ingredient", "Drug Name", "Generic Name", "Drug Class", "Similars", "Alternatives"])  # Empty DataFrame with headers
+            #print(f"Error in diseases_to_med_df: {e}")
+            return pd.DataFrame(columns=["Disease", "Active Ingredient", "Drug Name", "Generic Name", "Drug Class"])  # Empty DataFrame with headers

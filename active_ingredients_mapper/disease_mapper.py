@@ -37,10 +37,11 @@ class DiseaseActvIngMapper:
 
     def check_and_filter_new_diseases(self,diseases_list:List[str]=None)->List:
         lower_case_disease_classes=[x.lower() for x in actv.diseases_cls_to_active_ingredients.keys()]
+        
 
         filtered_list=[disease for disease in diseases_list if
-                        not disease.lower() in lower_case_disease_classes and
-                        not disease.lower() in list(self.df["Diseases"].str.lower())
+                        (not disease.strip(" ").lower() in lower_case_disease_classes) and
+                        (not disease.strip(" ").lower() in list(self.df["Diseases"].str.lower()))
                         ]
         
         return filtered_list
@@ -75,7 +76,8 @@ class DiseaseActvIngMapper:
 
         filtered_list=self.check_and_filter_new_diseases(extarcted_diseases_list)
 
-        if not filtered_list ==[]:
+
+        if filtered_list !=[]:
             new_diseses_dict=self.ai_map_disease_to_actv_ing(filtered_list)
 
             if not new_diseses_dict=={}:
@@ -91,7 +93,7 @@ class DiseaseActvIngMapper:
         lower_case_disease_classes=[x.lower() for x in actv.diseases_cls_to_active_ingredients.keys()]
 
         if disease.lower() in lower_case_disease_classes:
-            actv_ing_output[disease.split("(")[0].strip()]=actv.diseases_cls_to_active_ingredients[disease]
+            actv_ing_output[disease.split("(")[0].strip(" ")]=actv.diseases_cls_to_active_ingredients[disease]
         
         return actv_ing_output
         
@@ -104,9 +106,9 @@ class DiseaseActvIngMapper:
 
         lower_case_disease_classes=[x.lower() for x in actv.diseases_cls_to_active_ingredients.keys()]
 
-        if disease.lower() in list(self.df["Diseases"].str.lower()) and not disease.lower() in lower_case_disease_classes:
+        if (disease.strip(" ").lower() in list(self.df["Diseases"].str.lower()) ) and (not disease.strip(" ").lower() in lower_case_disease_classes):
                 
-                row=self.df[self.df["Diseases"].str.lower()==disease.lower()]
+                row=self.df[self.df["Diseases"].str.lower()==disease.lower().strip(" ")]
                 row=row.to_dict(orient="list")
 
                 # Extract the treatments: Primary, Alternative 1, and Alternative 2

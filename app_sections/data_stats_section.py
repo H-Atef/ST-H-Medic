@@ -5,7 +5,7 @@ path='app_sections.'
 pl=importlib.import_module(f'{path}plotter')
 
 def data_stats_section_content():
-    st.title("Medicine Data Stats. & Filters")
+    st.title("ST/H-Medic: Medicine Data Stats.")
 
     # Check if the medicine DataFrame exists in session state
     if 'med_df' in st.session_state and st.session_state.med_df is not None:

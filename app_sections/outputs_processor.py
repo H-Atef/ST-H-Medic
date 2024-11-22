@@ -1,10 +1,11 @@
 import pandas as pd
 
 class DiseaseOutputProcessor:
-    def __init__(self, predicted_diseases=None, actv_res=None, diseases_dict=None):
+    def __init__(self, predicted_diseases=None, actv_res=None, diseases_dict=None,med_data=None):
         self.predicted_diseases = predicted_diseases
         self.actv_res = actv_res
         self.diseases_dict = diseases_dict
+        self.med_data=med_data
     
     def predicted_diseases_to_df(self) -> pd.DataFrame:
         """Convert predicted diseases to a DataFrame"""
@@ -92,3 +93,43 @@ class DiseaseOutputProcessor:
         except Exception as e:
             #print(f"Error in diseases_to_med_df: {e}")
             return pd.DataFrame(columns=["Disease", "Active Ingredient", "Drug Name", "Generic Name", "Drug Class"])  # Empty DataFrame with headers
+
+
+    def med_to_df(self) -> pd.DataFrame:
+        """Convert medicines data to a DataFrame."""
+        try:
+            # Check if the medicines_data is provided correctly
+            if not self.med_data or not isinstance(self.med_data, dict):
+                return pd.DataFrame(columns=["Drug Name", "Generic Name", "Drug Class"])
+
+            data = []
+
+            # Iterate through the medicines data
+            for drug, details in self.med_data.items():
+                # Ensure the drug information is structured correctly
+                if not details:
+                    continue
+                
+                # Extract the drug details for each drug entry
+                drug_names = details.get("drug_name", ["-"] * max(len(details.get("drug_name", [])), 1))
+                generic_names = details.get("generic_name", ["-"] * max(len(details.get("generic_name", [])), 1))
+                drug_classes = details.get("drug_class", ["-"] * max(len(details.get("drug_class", [])), 1))
+                
+                # Determine the maximum length of the lists to ensure uniformity
+                max_len = max(len(drug_names), len(generic_names), len(drug_classes))
+                
+                # Extend lists to make them of equal length
+                drug_names.extend(["-"] * (max_len - len(drug_names)))
+                generic_names.extend(["-"] * (max_len - len(generic_names)))
+                drug_classes.extend(["-"] * (max_len - len(drug_classes)))
+                
+                # Add the rows to the data list for each drug
+                for i in range(max_len):
+                    data.append([drug_names[i], generic_names[i], drug_classes[i]])
+            
+            # Convert the data into a DataFrame
+            df = pd.DataFrame(data, columns=["Drug Name", "Generic Name", "Drug Class"])
+            return df
+        except Exception as e:
+            # Handle any errors and return an empty DataFrame with appropriate columns
+            return pd.DataFrame(columns=["Drug Name", "Generic Name", "Drug Class"])

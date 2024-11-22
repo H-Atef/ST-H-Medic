@@ -26,6 +26,63 @@ class DrugEyeActvIngScraper():
         active_ingredients = [values[:4] for keys, values in active_ingredients_dict.items()]
         diseases = list(active_ingredients_dict.keys())
         return active_ingredients, diseases
+    
+    def search_medicines(self, inputs_list, input_type):
+        
+        def thread_function(input, results_dict):
+            try:
+                driver = wb.WebScarpingToolInit().initialize_driver("google")
+                driver.get(self.url)
+                data = self.scrape_page(driver=driver, input=input, input_type=input_type)
+                results_dict[input] = data  # Store the result for the specific input
+            except Exception as e:
+                results_dict[input] = {}  # In case of error, store empty data
+            finally:
+                if driver:
+                    driver.close()  # Close the driver after each thread is done
+
+        threads = []
+        results_dict = {}
+
+        try:
+            # Create a thread for each input in the inputs_list
+            for input in inputs_list:
+                thread = threading.Thread(target=thread_function, args=(input, results_dict))
+                threads.append(thread)
+                thread.start()
+
+            # Wait for all threads to complete
+            for thread in threads:
+                thread.join()
+
+            return results_dict
+
+        except Exception as e:
+            # Handle any exceptions that might occur
+            return {}
+        
+
+
+    def scrape_page(self,driver,input,input_type='By Active Ingredient'):
+        
+        WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.NAME, "ttt"))).send_keys(input)
+
+        if input_type=='By Active Ingredient':
+            WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.ID, "BG"))).click()
+
+        else:
+            WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.ID, "b1"))).click()
+
+        table = driver.find_element(By.ID, "MyTable")
+        table.location_once_scrolled_into_view
+        table_html = table.get_attribute('outerHTML')
+        
+        data = self._extract_data(table_html)
+
+
+        return data
+
+
 
     def scrape_data_by_actv_ing(self, active_ingredient):
         driver=None
@@ -36,19 +93,15 @@ class DrugEyeActvIngScraper():
             self.data.update(data_store)
 
             # Check if the data for the active ingredient already exists
-            if active_ingredient in data_store:
+            if active_ingredient.strip(" ") in data_store:
                 return data_store[active_ingredient]
 
             driver = wb.WebScarpingToolInit().initialize_driver("google")
             driver.get(self.url)
 
-            WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.NAME, "ttt"))).send_keys(active_ingredient)
-            WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.ID, "BG"))).click()
-            table = driver.find_element(By.ID, "MyTable")
-            table.location_once_scrolled_into_view
-            table_html = table.get_attribute('outerHTML')
-            
-            data = self._extract_data(table_html)
+
+            data=self.scrape_page(driver=driver,input=active_ingredient)
+
  
             self.data.update({active_ingredient:data})
 

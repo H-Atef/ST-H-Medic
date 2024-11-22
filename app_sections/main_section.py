@@ -85,7 +85,7 @@ def main_section_content():
                 df_converter.actv_res = None
 
             if input_type == 'Symptoms':
-                predictor = disease_predictor.DiseasePredictionContext()
+                predictor = disease_predictor.MedDataContext()
                 predictor.set_predictor(MODELS_MAP[model_option])
                 predicted_diseases = predictor.predict(input_data['Entered Input'][0])
                 df_converter.predicted_diseases = predicted_diseases
@@ -104,10 +104,11 @@ def main_section_content():
                 del predictor
                 df_converter.predicted_diseases = None
 
-                # Generate and display the plot using the plotter class
-                plotter = pl.DiseasePredictionPlotter()
-                fig = plotter.generate_bar_chart(diseases_df)
-                st.plotly_chart(fig)
+                with st.expander('Show Plot'):
+                    # Generate and display the plot using the plotter class
+                    plotter = pl.MedDataPlotter()
+                    fig = plotter.generate_bar_chart(diseases_df)
+                    st.plotly_chart(fig)
 
                 actv_mapper = disease_actv_mapper.DiseaseActvIngMapper()
                 actv_res = actv_mapper.map_pridected_diseases_to_actv(predicted_diseases=predicted_diseases)
@@ -128,7 +129,9 @@ def main_section_content():
 
             # Scrape medicines data
             med_scraper = actv_med_scraper.DrugEyeActvIngScraper()
-            med_res = med_scraper.scrape_multiple_data(actv_res)
+
+            with st.spinner('Please Wait...'):
+                med_res = med_scraper.scrape_multiple_data(actv_res)
 
             # Convert to DataFrame
             df_converter.diseases_dict = med_res

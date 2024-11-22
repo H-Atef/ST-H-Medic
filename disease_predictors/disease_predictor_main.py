@@ -4,7 +4,7 @@ from disease_predictors.base_disease_predictor import DiseasePredictor  # Keep t
 
 path_d='disease_predictors.'
 
-class DiseasePredictionContext:
+class MedDataContext:
     """
     Context class to manage different disease prediction strategies (predictors).
     """

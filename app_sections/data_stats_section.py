@@ -30,14 +30,17 @@ def data_stats_section_content():
             with st.expander("Visualizations"):
                 st.write("### Visualizations:")
 
+                st.write('#### Medicines Count For Each Disease')
                 # Medicines count for each disease (Pie chart using Plotly)
                 fig_disease = pl.MedDataPlotter.plot_disease_count(med_df)
                 st.plotly_chart(fig_disease)
 
+                st.write('#### Active Ingredients Count')
                 # Active ingredient count plot (Bar chart using Plotly)
                 fig_actv_ing = pl.MedDataPlotter.plot_active_ingredient_count(med_df)
                 st.plotly_chart(fig_actv_ing)
 
+                st.write('#### Drug Classes Count')
                 # Drug class count plot (Bar chart using Plotly)
                 fig_drug_class = pl.MedDataPlotter.plot_drug_class_count(med_df)
                 st.plotly_chart(fig_drug_class)

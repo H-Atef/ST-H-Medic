@@ -89,6 +89,7 @@ class DiseaseOutputProcessor:
             
             # Convert the list of rows to a DataFrame
             df = pd.DataFrame(data, columns=["Disease", "Active Ingredient", "Drug Name", "Generic Name", "Drug Class"])
+            df.drop_duplicates(['Active Ingredient'],keep=False)
             return df
         except Exception as e:
             #print(f"Error in diseases_to_med_df: {e}")

@@ -93,7 +93,7 @@ class DrugEyeActvIngScraper():
             self.data.update(data_store)
 
             # Check if the data for the active ingredient already exists
-            if active_ingredient.strip(" ") in data_store:
+            if active_ingredient.strip(" ").lower() in [x.lower().strip(" ") for x in data_store.keys()]:
                 return data_store[active_ingredient]
 
             driver = wb.WebScarpingToolInit().initialize_driver("google")

@@ -71,18 +71,22 @@ def main_section_content():
                 df_converter.actv_res = actv_res
                 actv_df = df_converter.diseases_to_actv_df()
 
-                # Subtitle and note for the Disease prediction output
-                st.markdown("<h3 style='font-size: 24px;'>Active Ingredient Mapping for Predicted Diseases:</h3>", unsafe_allow_html=True)
-                st.write(actv_df)
+                if actv_df.empty:
+                    actv_res=None
 
-                st.markdown("<p style='font-size: 14px; color: gray;'>"
-                            "<strong>Note:</strong> The active ingredient mappings shown here are based on predicted diseases. "
-                            "Please note that these results are based on an algorithm and should not replace professional medical advice. "
-                            "We strongly recommend consulting with a healthcare professional for an accurate diagnosis and treatment plan. "
-                            "This prediction could potentially be incorrect and should be used for informational purposes only.</p>", unsafe_allow_html=True)
+                if not actv_df.empty:
+                    # Subtitle and note for the Disease prediction output
+                    st.markdown("<h3 style='font-size: 24px;'>Active Ingredient Mapping for Predicted Diseases:</h3>", unsafe_allow_html=True)
+                    st.write(actv_df)
 
-                del actv_mapper
-                df_converter.actv_res = None
+                    st.markdown("<p style='font-size: 14px; color: gray;'>"
+                                "<strong>Note:</strong> The active ingredient mappings shown here are based on predicted diseases. "
+                                "Please note that these results are based on an algorithm and should not replace professional medical advice. "
+                                "We strongly recommend consulting with a healthcare professional for an accurate diagnosis and treatment plan. "
+                                "This prediction could potentially be incorrect and should be used for informational purposes only.</p>", unsafe_allow_html=True)
+
+                    del actv_mapper
+                    df_converter.actv_res = None
 
             if input_type == 'Symptoms':
                 predictor = disease_predictor.MedDataContext()
@@ -104,55 +108,63 @@ def main_section_content():
                 del predictor
                 df_converter.predicted_diseases = None
 
-                with st.expander('Show Plot'):
-                    # Generate and display the plot using the plotter class
-                    plotter = pl.MedDataPlotter()
-                    fig = plotter.generate_bar_chart(diseases_df)
-                    st.plotly_chart(fig)
+                if diseases_df.empty:
+                    actv_res=None
 
-                actv_mapper = disease_actv_mapper.DiseaseActvIngMapper()
-                actv_res = actv_mapper.map_pridected_diseases_to_actv(predicted_diseases=predicted_diseases)
-                df_converter.actv_res = actv_res
-                actv_df = df_converter.diseases_to_actv_df()
+                if not diseases_df.empty:
+                    with st.expander('Show Plot'):
+                        # Generate and display the plot using the plotter class
+                        plotter = pl.MedDataPlotter()
+                        fig = plotter.generate_bar_chart(diseases_df)
+                        st.plotly_chart(fig)
 
-                # Subtitle for Active Ingredient mapping
-                st.markdown("<h3 style='font-size: 24px;'>Active Ingredient Mapping for Predicted Diseases:</h3>", unsafe_allow_html=True)
-                st.write(actv_df)
+
+
+                    actv_mapper = disease_actv_mapper.DiseaseActvIngMapper()
+                    actv_res = actv_mapper.map_pridected_diseases_to_actv(predicted_diseases=predicted_diseases)
+                    df_converter.actv_res = actv_res
+                    actv_df = df_converter.diseases_to_actv_df()
+
+                    # Subtitle for Active Ingredient mapping
+                    st.markdown("<h3 style='font-size: 24px;'>Active Ingredient Mapping for Predicted Diseases:</h3>", unsafe_allow_html=True)
+                    st.write(actv_df)
+
+                    st.markdown("<p style='font-size: 14px; color: gray;'>"
+                                "<strong>Note:</strong> These active ingredient mappings are based on the predicted diseases. "
+                                "This prediction is purely informational and may not be suitable for actual treatment without confirmation by a medical professional. "
+                                "Please do not take any medications based on these predictions alone. Always seek advice from a qualified healthcare provider before taking any medication.</p>", unsafe_allow_html=True)
+
+                    del actv_mapper
+                    df_converter.actv_res = None
+
+            if actv_res is not None:
+
+                # Scrape medicines data
+                med_scraper = actv_med_scraper.DrugEyeActvIngScraper()
+
+                with st.spinner('Please Wait...'):
+                    med_res = med_scraper.scrape_multiple_data(actv_res)
+
+                # Convert to DataFrame
+                df_converter.diseases_dict = med_res
+                med_df = df_converter.diseases_to_med_df()
+
+                # Store the medicines DataFrame in session state
+                st.session_state.med_df = med_df
+
+                # Subtitle for medicines
+                st.markdown("<h3 style='font-size: 24px;'>Medicines Based on Active Ingredients:</h3>", unsafe_allow_html=True)
+                st.write(med_df)
 
                 st.markdown("<p style='font-size: 14px; color: gray;'>"
-                            "<strong>Note:</strong> These active ingredient mappings are based on the predicted diseases. "
-                            "This prediction is purely informational and may not be suitable for actual treatment without confirmation by a medical professional. "
-                            "Please do not take any medications based on these predictions alone. Always seek advice from a qualified healthcare provider before taking any medication.</p>", unsafe_allow_html=True)
+                            "<strong>Note:</strong> The medicines listed here are based on the active ingredients mapped from the predicted diseases. "
+                            "However, this list should not be used to make medical decisions without consulting a healthcare professional. "
+                            "Always speak to a doctor or a pharmacist before taking any medication. "
+                            "These medicines may have side effects, interactions with other medications, or be unsuitable for certain conditions. "
+                            "Please seek medical guidance for safe and effective treatment options.</p>", unsafe_allow_html=True)
 
-                del actv_mapper
-                df_converter.actv_res = None
-
-            # Scrape medicines data
-            med_scraper = actv_med_scraper.DrugEyeActvIngScraper()
-
-            with st.spinner('Please Wait...'):
-                med_res = med_scraper.scrape_multiple_data(actv_res)
-
-            # Convert to DataFrame
-            df_converter.diseases_dict = med_res
-            med_df = df_converter.diseases_to_med_df()
-
-            # Store the medicines DataFrame in session state
-            st.session_state.med_df = med_df
-
-            # Subtitle for medicines
-            st.markdown("<h3 style='font-size: 24px;'>Medicines Based on Active Ingredients:</h3>", unsafe_allow_html=True)
-            st.write(med_df)
-
-            st.markdown("<p style='font-size: 14px; color: gray;'>"
-                        "<strong>Note:</strong> The medicines listed here are based on the active ingredients mapped from the predicted diseases. "
-                        "However, this list should not be used to make medical decisions without consulting a healthcare professional. "
-                        "Always speak to a doctor or a pharmacist before taking any medication. "
-                        "These medicines may have side effects, interactions with other medications, or be unsuitable for certain conditions. "
-                        "Please seek medical guidance for safe and effective treatment options.</p>", unsafe_allow_html=True)
-
-            del med_scraper
-            df_converter.diseases_dict = None
+                del med_scraper
+                df_converter.diseases_dict = None
 
         except Exception as e:
             st.error(f"Error during prediction or mapping: {e}")

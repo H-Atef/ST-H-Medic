@@ -1,0 +1,16 @@
+__pycache__/
+*.pdf
+*.csv
+*.pkl
+roberta_model/
+datasets/
+custom_model/
+ai_model_auth.py
+json-outputs/
+extras/
+common_diseases_list.py
+custom_disease_predictor.py
+groq_disease_predictor.py
+dataset_generator
+ai_mapper.py
+active_ingredient_scraper.py

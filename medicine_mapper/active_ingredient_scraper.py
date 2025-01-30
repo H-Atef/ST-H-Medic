@@ -30,12 +30,15 @@ class DrugEyeActvIngScraper():
     def search_medicines(self, inputs_list, input_type):
         
         def thread_function(input, results_dict):
+            driver=None
             try:
                 driver = wb.WebScarpingToolInit().initialize_driver("google")
                 driver.get(self.url)
+                #print(driver.url)
                 data = self.scrape_page(driver=driver, input=input, input_type=input_type)
                 results_dict[input] = data  # Store the result for the specific input
             except Exception as e:
+                #print(e)
                 results_dict[input] = {}  # In case of error, store empty data
             finally:
                 if driver:
@@ -108,7 +111,7 @@ class DrugEyeActvIngScraper():
             return data
         
         except Exception as e:
-            #print(e)
+            print(e)
             return {}
         finally:
             if driver:
@@ -206,6 +209,8 @@ class DrugEyeActvIngScraper():
 # output_example = {'common cold': ['Echinacea', 'Paracetamol (Acetaminophen)', 'Zinc Supplements', 'Ibuprofen', 'Vitamin C', 'Diphenhydramine']}
 
 # json11 = scraper.scrape_multiple_data(output_example)
+
+# print(json11)
 
 # import json
 # with open('ex.json', 'w+') as file:

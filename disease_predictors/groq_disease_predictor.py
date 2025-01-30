@@ -65,12 +65,11 @@ class GroqDiseasePredictor(importlib.import_module(module1).DiseasePredictor):
                         "role": "user",
                         "content": """ 
                                 ```
-                                Return the following:
+                                Return the output like the following example for each case in this format:
 
                                 ```  
                                 {
-                                'case1' : [('diseases', probabilities)],
-                                'case2' : [('diseases', probabilities)],
+                                'case1' : [('diseases', probabilities)]
                                 }
                                 ```
                                 """+f"""
@@ -92,13 +91,13 @@ class GroqDiseasePredictor(importlib.import_module(module1).DiseasePredictor):
                         
                     }
                 ],
-                model="llama-3.1-70b-versatile",  # Assuming Groq uses Llama3 model
+                model="llama3-8b-8192",  # Assuming Groq uses Llama3 model
             )
 
             # Parse the result from the API (assuming it's a string representation of a list of tuples)
             predictions = chat_completion.choices[0].message.content
 
-            #print(predictions)
+            print(predictions)
 
 
             # Using eval to convert the string into a list of tuples
@@ -112,7 +111,7 @@ class GroqDiseasePredictor(importlib.import_module(module1).DiseasePredictor):
             return self.convert_and_transfrom_result_dict(results)
         
         except Exception as e:
-            #print(e)
+            print(e)
             return []
     
     def convert_and_transfrom_result_dict(self,data):

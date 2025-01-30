@@ -48,8 +48,10 @@ def main_section_content():
 
 
     # Create a DataFrame for displaying the entered information
+    cases_input=input_text.strip().strip(' ').split('/')
+    cases_processed=[ f"Case {i+1}: {c}" for i,c in enumerate(cases_input)]
     input_data = {
-        "Entered Input": [input_text.strip().strip(' ').split('/')],
+        "Entered Input": [cases_processed],
         "Input Type": [input_type],
         "Prediction Model": [model_option] if input_type == 'Symptoms' else ["-"]
     }
@@ -66,9 +68,17 @@ def main_section_content():
             df_converter = pro.DiseaseOutputProcessor()
 
             if input_type == 'Disease':
+
+                #create disease to active mapper object
                 actv_mapper = disease_actv_mapper.DiseaseActvIngMapper()
+
+                #call mapping function
                 actv_res = actv_mapper.map_pridected_diseases_to_actv(input_data['Entered Input'][0])
+
+                #set the results to the processor to convert it to the appropriate format
                 df_converter.actv_res = actv_res
+
+                #convert results to df format 
                 actv_df = df_converter.diseases_to_actv_df()
 
                 if actv_df.empty:

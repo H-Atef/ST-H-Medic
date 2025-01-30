@@ -1,7 +1,8 @@
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
 import requests
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.chrome.service import Service
 
 
 class WebScarpingToolInit:
@@ -17,8 +18,9 @@ class WebScarpingToolInit:
             return driver
         
         else:
+           
             chrome_options = webdriver.ChromeOptions()
-            chrome_options.add_argument('--headless=old')
+            chrome_options.add_argument('--headless')
             chrome_options.add_argument("window-size=1100,641")
             prefs = {'profile.default_content_setting_values': {'cookies': 2, 'images': 2, 
                             'plugins': 2, 'popups': 2, 'geolocation': 2, 
@@ -35,7 +37,7 @@ class WebScarpingToolInit:
             chrome_options.add_argument('--disable-gpu')
             chrome_options.add_argument("--no-sandbox")
             chrome_options.add_argument('log-level=3')
-            driver = webdriver.Chrome(options=chrome_options)
+            driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()),options=chrome_options)
             return driver
     
     def initialize_requests_client(self,link=None)->requests.Response:

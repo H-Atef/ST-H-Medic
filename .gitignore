@@ -8,3 +8,4 @@ custom_model/
 ai_model_auth.py
 json-outputs/
 extras/
+venv/

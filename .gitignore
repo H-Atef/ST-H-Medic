@@ -5,7 +5,8 @@ __pycache__/
 roberta_model/
 datasets/
 custom_model/
-ai_model_auth.py
 json-outputs/
 extras/
 venv/
+tree.txt
+.env

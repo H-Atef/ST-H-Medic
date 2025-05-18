@@ -33,21 +33,21 @@ class DiseaseOutputProcessor:
         try:
             # Check if input is None or empty
             if not self.actv_res or not isinstance(self.actv_res, dict) or len(self.actv_res) == 0:
-                return pd.DataFrame(columns=["Disease", "Active Ingredient", "Line"])  # Empty DataFrame with headers
+                return pd.DataFrame(columns=["Disease", "Active Ingredient", "Options"])  # Empty DataFrame with headers
 
             actv_data = []
             for disease, ingredients in self.actv_res.items():
                 if not ingredients:  # Handle empty ingredients list
                     continue
                 for i, ingredient in enumerate(ingredients[:3]):  # Limit to 3 ingredients
-                    actv_data.append([disease, ingredient, f"{['primary', 'alternative1', 'alternative2'][i]}"])
+                    actv_data.append([disease, ingredient, f"{['option-1', 'option-2', 'option-3'][i]}"])
             
             # Create DataFrame
-            df = pd.DataFrame(actv_data, columns=["Disease", "Active Ingredient", "Line"])
+            df = pd.DataFrame(actv_data, columns=["Disease", "Active Ingredient", "Options"])
             return df
         except Exception as e:
             #print(f"Error in diseases_to_actv_df: {e}")
-            return pd.DataFrame(columns=["Disease", "Active Ingredient", "Line"])  # Empty DataFrame with headers
+            return pd.DataFrame(columns=["Disease", "Active Ingredient", "Options"])  # Empty DataFrame with headers
     
     def diseases_to_med_df(self) -> pd.DataFrame:
         """Convert diseases' medicines to a DataFrame"""

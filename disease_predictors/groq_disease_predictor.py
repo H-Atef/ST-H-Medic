@@ -2,9 +2,13 @@ from sklearn.base import ClassifierMixin
 from typing import Tuple,List,Type
 from groq import Groq
 import importlib
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 module1='disease_predictors.base_disease_predictor'
-module2='disease_predictors.ai_model_auth'
+
 
 
 class GroqDiseasePredictor(importlib.import_module(module1).DiseasePredictor):
@@ -21,7 +25,7 @@ class GroqDiseasePredictor(importlib.import_module(module1).DiseasePredictor):
             model_params: A dictionary of hyperparameters for the model (default is None).
         """
         super().__init__(df=None, model=model, model_params=model_params)  # df is not needed here as we're using Groq API
-        self.client = Groq(api_key=importlib.import_module(module2).API_KEY)
+        self.client = Groq(api_key=os.getenv("API_KEY"))
 
     def initialize_model(self) -> dict:
         """

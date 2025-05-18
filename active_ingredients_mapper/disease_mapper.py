@@ -111,10 +111,10 @@ class DiseaseActvIngMapper:
                 row=self.df[self.df["Diseases"].str.lower()==disease.lower().strip(" ")]
                 row=row.to_dict(orient="list")
 
-                # Extract the treatments: Primary, Alternative 1, and Alternative 2
-                treatments = row['Primary Active Ingredient'] + \
-                            row['Alternative Treatment 1'] + \
-                            row['Alternative Treatment 2']
+                # Extract the treatments: Option 1 Treatment, Option 2 Treatment, and Option 3 Treatment
+                treatments = row['Option 1 Treatment'] + \
+                             row['Option 2 Treatment'] + \
+                             row['Option 3 Treatment']
                 
                 # Remove duplicates by converting to a set, then back to a list
                 unique_treatments = list(set(treatments))
@@ -131,9 +131,9 @@ class DiseaseActvIngMapper:
 
             new_df = pd.DataFrame.from_dict(
                             {disease: {
-                                'Primary Active Ingredient': ingredients[0] if len(ingredients) > 0 else None,
-                                'Alternative Treatment 1': ingredients[1] if len(ingredients) > 1 else None,
-                                'Alternative Treatment 2': ingredients[2] if len(ingredients) > 2 else None,
+                                'Option 1 Treatment': ingredients[0] if len(ingredients) > 0 else None,
+                                'Option 2 Treatment': ingredients[1] if len(ingredients) > 1 else None,
+                                'Option 3 Treatment': ingredients[2] if len(ingredients) > 2 else None,
                                 'Diseases': disease
                             } for disease, ingredients in data_dict.items()},
                             orient='index'
@@ -144,8 +144,8 @@ class DiseaseActvIngMapper:
             except FileNotFoundError:
                 # If file is not found, create an empty DataFrame with the specified columns
                 ai_df = pd.DataFrame(columns=[
-                    'Primary Active Ingredient','Alternative Treatment 1', 
-                    'Alternative Treatment 2', 'Diseases'])
+                    'Option 1 Treatment','Option 2 Treatment', 
+                    'Option 3 Treatment', 'Diseases'])
 
             # Append the new data to the existing DataFrame
             self.df = pd.concat([self.df, new_df], ignore_index=True)

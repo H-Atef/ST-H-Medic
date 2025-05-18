@@ -242,55 +242,55 @@ top_diseases_classes = {
 
 diseases_cls_to_active_ingredients= {
     'Liver Diseases (Hepatitis B, Hepatitis C, Alcoholic Hepatitis, Chronic Hepatitis)': [
-        'Entecavir (first-line)', 'Sofosbuvir (second-line)', 'Ribavirin (third-line)'
+        'Entecavir (option-1)', 'Sofosbuvir (option-2)', 'Ribavirin (option-3)'
     ],
     'Cardiovascular Diseases (Heart Disease, Stroke, Heart Attack)': [
-        'Aspirin (first-line)', 'Statins (second-line)', 'Beta-blockers (third-line)'
+        'Aspirin (option-1)', 'Statins (option-2)', 'Beta-blockers (option-3)'
     ],
     'Diabetes & Metabolic Disorders (Type 2 Diabetes, Hypertension, Obesity, Hyperthyroidism, Hypothyroidism)': [
-        'Metformin (first-line)', 'Insulin (second-line)', 'SGLT2 Inhibitors (third-line)'
+        'Metformin (option-1)', 'Insulin (option-2)', 'SGLT2 Inhibitors (option-3)'
     ],
     'Headache & Migraines': [
-        'Sumatriptan (first-line)', 'NSAIDs (second-line)', 'Verapamil (third-line)'
+        'Sumatriptan (option-1)', 'NSAIDs (option-2)', 'Verapamil (option-3)'
     ],
     'Respiratory Diseases (Asthma, COPD, Pneumonia, Bronchitis, COVID)': [
-        'Salbutamol (first-line)', 'Budesonide (second-line)', 'Theophylline (third-line)'
+        'Salbutamol (option-1)', 'Budesonide (option-2)', 'Theophylline (option-3)'
     ],
     'Gastrointestinal Disorders (Diarrhea, Gastroenteritis, Stomach Ulcer, Peptic Ulcer Disease, GERD)': [
-        'Omeprazole (first-line)', 'Ranitidine (second-line)', 'Loperamide (third-line)'
+        'Omeprazole (option-1)', 'Ranitidine (option-2)', 'Loperamide (option-3)'
     ],
     'Infectious Diseases (Tuberculosis, Dengue, Typhoid, Malaria)': [
-        'Isoniazid (first-line)', 'Rifampicin (second-line)', 'Artesunate (third-line)'
+        'Isoniazid (option-1)', 'Rifampicin (option-2)', 'Artesunate (option-3)'
     ],
     'Skin Disorders (Acne, Psoriasis, Impetigo, Fungal Infections)': [
-        'Benzoyl Peroxide (first-line)', 'Topical Steroids (second-line)', 'Itraconazole (third-line)'
+        'Benzoyl Peroxide (option-1)', 'Topical Steroids (option-2)', 'Itraconazole (option-3)'
     ],
     'Allergic & Autoimmune Diseases (Allergy, Drug Reaction)': [
-        'Loratadine (first-line)', 'Cetirizine (second-line)', 'Prednisone (third-line)'
+        'Loratadine (option-1)', 'Cetirizine (option-2)', 'Prednisone (option-3)'
     ],
     'Common Cold (Upper Respiratory Tract Infection)': [
-        'Paracetamol (first-line)', 'Ibuprofen (second-line)', 'Nasal decongestants (third-line)'
+        'Paracetamol (option-1)', 'Ibuprofen (option-2)', 'Nasal decongestants (option-3)'
     ],
     'Musculoskeletal Disorders (Arthritis, Osteoarthritis)': [
-        'Ibuprofen (first-line)', 'Methotrexate (second-line)', 'Hydrocodone (third-line)'
+        'Ibuprofen (option-1)', 'Methotrexate (option-2)', 'Hydrocodone (option-3)'
     ],
     'Neurological Disorders (Paralysis, Brain Hemorrhage)': [
-        'Tissue Plasminogen Activator (first-line)', 'Heparin (second-line)', 'Clonazepam (third-line)'
+        'Tissue Plasminogen Activator (option-1)', 'Heparin (option-2)', 'Clonazepam (option-3)'
     ],
     'Other Conditions (Urinary Tract Infection)': [
-        'Ciprofloxacin (first-line)', 'Amoxicillin (second-line)', 'Nitrofurantoin (third-line)'
+        'Ciprofloxacin (option-1)', 'Amoxicillin (option-2)', 'Nitrofurantoin (option-3)'
     ],
     'Cancer (Breast Cancer, Lung Cancer, Leukemia, Prostate Cancer, Colorectal Cancer, Ovarian Cancer, Skin Cancer, Lymphoma)': [
-        'Tamoxifen (first-line)', 'Docetaxel (second-line)', 'Imatinib (third-line)'
+        'Tamoxifen (option-1)', 'Docetaxel (option-2)', 'Imatinib (option-3)'
     ],
     'Depression & Mental Health Disorders (Depression, Anxiety, Bipolar Disorder, PTSD, Schizophrenia, OCD)': [
-        'Sertraline (first-line)', 'Citalopram (second-line)', 'Lithium (third-line)'
+        'Sertraline (option-1)', 'Citalopram (option-2)', 'Lithium (option-3)'
     ],
     'COVID': [
-        'Remdesivir (first-line)', 'Dexamethasone (second-line)', 'Tocilizumab (third-line)'
+        'Remdesivir (option-1)', 'Dexamethasone (option-2)', 'Tocilizumab (option-3)'
     ],
     'Additional related categories': [
-        'Iron Supplements (first-line)', 'Erythropoietin (second-line)', 'Dialysis (third-line)'
+        'Iron Supplements (option-1)', 'Erythropoietin (option-2)', 'Dialysis (option-3)'
     ]
 }
 
